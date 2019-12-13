@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="row">
+        <form method="POST" action="">
+            <div class='col-sm-6'>
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.start_date.label }}
+                    {{ form.start_date(class_="form-control") }}
+                    {{ form.end_date.label }}
+                    {{ form.end_date(class_="form-control") }}
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Stages</legend>
+                    {% if form.stages.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.stages.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% for stage in form.stages %}
+                        <div class="form-check">
+                            <div class="form-check form-check-inline">
+                                {{ stage(class="form-check-input") }}
+                                {{ stage.label(class="form-check-label") }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </fieldset>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if results %}
+
+        <div class="row">
+            <p class="lead">{{ description }}</p>
+        </div>
+
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Stage</th>
+                    <th scope="col">Number of candidates</th>
+                    <th scope="col">Conversion ratio</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in results %}
+                    <tr>
+                        <td>{{ row.stage }}</td>
+                        <td>{{ row.candidate_count }}</td>
+                        <td>{{ (row.conversion_ratio*100)|round|int }}%</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}
